@@ -74,8 +74,11 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                myAdapter.add(position);
-                Toast.makeText(MainActivity.this, "图片的点击监听" + position, Toast.LENGTH_SHORT).show();
+                /*//调用添加数据的方法
+                myAdapter.add(position);*/
+                //调用全选的方法
+                myAdapter.selectedAll();
+//                Toast.makeText(MainActivity.this, "图片的点击监听" + position, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -83,9 +86,12 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.setOnItemLongClickListener(new MyAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(View view, int position) {
-//                myAdapter.remove(position);
-                myAdapter.update(position,"修改的数据");
-                Toast.makeText(MainActivity.this, "图片的长按监听" + position, Toast.LENGTH_SHORT).show();
+                //删除和修改的方法
+                /*//myAdapter.remove(position);
+                myAdapter.update(position,"修改的数据");*/
+//                Toast.makeText(MainActivity.this, "图片的长按监听" + position, Toast.LENGTH_SHORT).show();
+                //反选的方法
+                myAdapter.revertSelected();
                 return true;
             }
         });
