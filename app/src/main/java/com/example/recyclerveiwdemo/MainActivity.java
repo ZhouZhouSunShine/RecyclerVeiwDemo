@@ -50,13 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
         gridLayoutManager = new GridLayoutManager(this,3);
         //设置条目的样式
-        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        /*gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 //看跨度   第二个参数是几  就是几个跨度
                 return 3 - position % 3;
             }
-        });
+        });*/
 
         //瀑布流的形式
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -89,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        //给ListView形式的添加线条
+        recyclerView.addItemDecoration(new MyDecoration(this,LinearLayoutManager.VERTICAL));
+        //给GridView形式的添加线条
+        recyclerView.addItemDecoration(new MyDecoration(this,GridLayoutManager.HORIZONTAL));
     }
 
     //点击监听的修饰符一定是公共的
@@ -104,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
         if (layoutManager instanceof GridLayoutManager) {
             //初始的
             //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+            recyclerView.setLayoutManager(linearLayoutManager);
+        } else if (layoutManager instanceof LinearLayoutManager) {
             //初始的
             //GridLayoutManager gridLayoutManager = new GridLayoutManager(this,3);
             recyclerView.setLayoutManager(gridLayoutManager);
