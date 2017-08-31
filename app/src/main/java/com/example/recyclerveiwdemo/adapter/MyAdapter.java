@@ -39,13 +39,60 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return new MyViewHolder(recyclerViewItem);
     }
 
+    //单击事件的接口
+    public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+    }
+
+
+    //长按事件的接口
+    public interface OnItemLongClickListener{
+        boolean onItemLongClick(View view,int position);
+    }
+
+    //使用两个接口
+    private OnItemClickListener mItemClickListener;
+    private OnItemLongClickListener mItemLongClickListener;
+
+    //定义两个方法
+    //点击监听
+    public void setOnItemClickListener(OnItemClickListener itemClickListener){
+        mItemClickListener = itemClickListener;
+    }
+    //长按监听
+    public void setOnItemLongClickListener(OnItemLongClickListener itemLongClickListener){
+        mItemLongClickListener = itemLongClickListener;
+    }
     //绑定数据
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.title.setText(list.get(position));
-        if (position % 2 == 1) {
+        //做点击监听  先注释掉   用默认的图片
+        /*if (position % 2 == 1) {
             holder.icon.setImageResource(R.drawable.a);
-        }
+        }*/
+
+        //图片的点击监听
+        holder.icon.setOnClickListener(new View.OnClickListener() {
+            // TODO: 2017/8/31 0031   要暴露一个接口出去
+            @Override
+            public void onClick(View v) {
+                if(mItemClickListener != null){
+                    mItemClickListener.onItemClick(v,position);
+                }
+            }
+        });
+
+        //图片的长按监听
+        holder.icon.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(mItemLongClickListener != null){
+                    mItemLongClickListener.onItemLongClick(v,position);
+                }
+                return true;
+            }
+        });
     }
 
     @Override

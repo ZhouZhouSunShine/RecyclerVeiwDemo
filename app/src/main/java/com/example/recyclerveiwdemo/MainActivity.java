@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.recyclerveiwdemo.adapter.MyAdapter;
 
@@ -59,12 +60,32 @@ public class MainActivity extends AppCompatActivity {
 
         //瀑布流的形式
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        //瀑布流的形式
+        //recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+        //做点击监听
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         //设置适配器
         myAdapter = new MyAdapter();
         recyclerView.setAdapter(myAdapter);
+
+        //设置点击
+        myAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(MainActivity.this, "图片的点击监听", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //设置长按点击
+        myAdapter.setOnItemLongClickListener(new MyAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(View view, int position) {
+                Toast.makeText(MainActivity.this, "图片的长按监听", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     //点击监听的修饰符一定是公共的
