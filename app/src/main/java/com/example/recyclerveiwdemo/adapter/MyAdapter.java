@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.recyclerveiwdemo.R;
 
+import java.security.PolicySpi;
 import java.util.ArrayList;
 
 /**
@@ -39,15 +40,36 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return new MyViewHolder(recyclerViewItem);
     }
 
+    //添加一条数据的方法
+    public void add(int position) {
+        list.add(position + 1, "新添加一条数据");
+
+        //刷新界面
+        notifyItemRangeChanged(position + 1, getItemCount());
+    }
+
+    //长按删除一条数据
+    public void remove(int position) {
+        list.remove(position);
+        notifyItemRangeChanged(position, getItemCount());
+    }
+
+    //修改一条数据
+    public void update(int position, String content) {
+        list.remove(position);
+        list.add(position, content);
+        notifyItemChanged(position);
+    }
+
     //单击事件的接口
-    public interface OnItemClickListener{
-        void onItemClick(View view,int position);
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 
 
     //长按事件的接口
-    public interface OnItemLongClickListener{
-        boolean onItemLongClick(View view,int position);
+    public interface OnItemLongClickListener {
+        boolean onItemLongClick(View view, int position);
     }
 
     //使用两个接口
@@ -56,13 +78,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     //定义两个方法
     //点击监听
-    public void setOnItemClickListener(OnItemClickListener itemClickListener){
+    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
     }
+
     //长按监听
-    public void setOnItemLongClickListener(OnItemLongClickListener itemLongClickListener){
+    public void setOnItemLongClickListener(OnItemLongClickListener itemLongClickListener) {
         mItemLongClickListener = itemLongClickListener;
     }
+
     //绑定数据
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
@@ -72,13 +96,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             holder.icon.setImageResource(R.drawable.a);
         }*/
 
+        //整个item条目的点击
+        //holder.itemView.setOnClickListener(new View.OnClickListener() {
+        //  @Override
+        //  public void onClick(View v) {
+        ////// TODO: 2017/8/31 暴露一个单击回调接口
+        //  if (mItemClickListener != null) {
+        //      mItemClickListener.onItemClick(v, position);
+        //          }
+        //      }
+        //  });
+
         //图片的点击监听
         holder.icon.setOnClickListener(new View.OnClickListener() {
             // TODO: 2017/8/31 0031   要暴露一个接口出去
             @Override
             public void onClick(View v) {
-                if(mItemClickListener != null){
-                    mItemClickListener.onItemClick(v,position);
+                if (mItemClickListener != null) {
+                    mItemClickListener.onItemClick(v, position);
                 }
             }
         });
@@ -87,8 +122,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.icon.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if(mItemLongClickListener != null){
-                    mItemLongClickListener.onItemLongClick(v,position);
+                if (mItemLongClickListener != null) {
+                    mItemLongClickListener.onItemLongClick(v, position);
                 }
                 return true;
             }
@@ -102,6 +137,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        //定义一个View 做整个子条目的监听
+        View itemView;
+
         //定义控件的全局变量
         private final TextView title;
         private final ImageView icon;
@@ -109,6 +147,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         //寻找控件
         public MyViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             title = (TextView) itemView.findViewById(R.id.recyclerView_title);
             icon = (ImageView) itemView.findViewById(R.id.recyclerView_icon);
         }
